@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
     return -1;
   }
   while (1) {
-    printf("a prompt ");
+    printf("> ");
     char s[2048];
     fgets(s, 2048, stdin);
 
@@ -18,24 +18,25 @@ int main(int argc, char **argv) {
     int count = 0;
     char* token;
 
-
     if ((token = strtok(s, " \t\n\r")) != NULL) {
         do {
           words[count] = malloc(sizeof(token));
           strcpy(words[count], token);
           count = count + 1;
-            printf("Token: \"%s\"\n", token);
+          //printf("Token: \"%s\"\n", token);
         } while ((token = strtok(NULL, " \t\n\r")) != NULL);
     }
-    words[count] = "/0";
+    words[count] = NULL;
 
-    
+    execvp(words[0], words);
+    /*
     printf("\n\n\n");
     for (int i = 0; i < count; i++) {
       printf("%s\n", words[i]);
     }
-    
+    */
   }
+  
 /*
   char buf[2048];
   int count = read(fd, buf, sizeof buf);
