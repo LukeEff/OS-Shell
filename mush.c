@@ -4,15 +4,15 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-int main(int argc, char **argv) {
-  if (argc == 0)
-  {
-    return -1;
-  }
+int main() {
   while (1) {
-    printf("> ");
+    printf("mush$ ");
     char s[2048];
     fgets(s, 2048, stdin);
+
+    if (feof(stdin)) {
+      exit(0);
+    }
 
     char* words[128];
     int count = 0;
@@ -26,15 +26,24 @@ int main(int argc, char **argv) {
         } while ((token = strtok(NULL, " \t\n\r")) != NULL);
     }
     words[count] = NULL;
-
+    if (count == 0) continue;
     if (strcmp(words[0], "exit") == 0) {
-      exit(0);
+      if (count == 1) {
+        exit(0);
+      }
+      int value = atoi(words[1]);
+      exit(value);
     }
 
     if (strcmp(words[0], "cd") == 0) {
-      int status = chdir(words[1]);
-      if (status == -1) {
-        perror("Error");
+      if (count != 2) {
+        fprintf(stderr, "usage: cd directory\n");
+      }
+      else {
+        int status = chdir(words[1]);
+        if (status == -1) {
+          perror(words[1]);
+        }
       }
       continue;
     }
