@@ -26,13 +26,28 @@ int main(int argc, char **argv) {
         } while ((token = strtok(NULL, " \t\n\r")) != NULL);
     }
     words[count] = NULL;
+
+    if (strcmp(words[0], "exit") == 0) {
+      exit(0);
+    }
+
+    if (strcmp(words[0], "cd") == 0) {
+      int status = chdir(words[1]);
+      if (status == -1) {
+        perror("Error");
+      }
+      continue;
+    }
+
     int f = fork();
     if (f == 0) {
       execvp(words[0], words);
-      perror("Error: execvp returned a value!");
+      perror("Error");
       exit(1);
     }
     wait(NULL);
   }
   return 0;
 }
+
+
