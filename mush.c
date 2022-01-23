@@ -30,10 +30,9 @@ int main(int argc, char **argv) {
     if (f == 0) {
       execvp(words[0], words);
       perror("Error: execvp returned a value!");
+      exit(1);
     }
-    else {
-      wait(NULL);
-    }
+    wait(NULL);
   }
   return 0;
 }
