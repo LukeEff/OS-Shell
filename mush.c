@@ -23,26 +23,17 @@ int main(int argc, char **argv) {
           words[count] = malloc(sizeof(token));
           strcpy(words[count], token);
           count = count + 1;
-          //printf("Token: \"%s\"\n", token);
         } while ((token = strtok(NULL, " \t\n\r")) != NULL);
     }
     words[count] = NULL;
-
-    execvp(words[0], words);
-    /*
-    printf("\n\n\n");
-    for (int i = 0; i < count; i++) {
-      printf("%s\n", words[i]);
+    int f = fork();
+    if (f == 0) {
+      execvp(words[0], words);
+      perror("Error: execvp returned a value!");
     }
-    */
+    else {
+      wait(NULL);
+    }
   }
-  
-/*
-  char buf[2048];
-  int count = read(fd, buf, sizeof buf);
-  count = write(1, buf, count);
-  close(fd);
- */
-
   return 0;
 }
